@@ -1,8 +1,7 @@
 import numpy as np
-from collections import deque
 
-# Movimientos posibles (arriba, abajo, izquierda, derecha)
-MOVIMIENTOS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+# Movimientos posibles (arriba, derecha, abajo, izquierda)
+MOVIMIENTOS = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
 def es_valida(pos, ciudad):
     filas, cols = len(ciudad), len(ciudad[0])
@@ -16,6 +15,10 @@ def costo(casilla):
         return 4  # tráfico medio
     elif casilla == 4:
         return 7  # tráfico pesado
+    elif casilla == 5:
+        return 1  # el costo de la casilla del pasajero es como una vía libre
+    elif casilla == 6:
+        return 1  # el costo de la casilla del destino es como una vía libre
     return 0
 
 def encontrar_posiciones(ciudad):
@@ -35,20 +38,20 @@ def encontrar_posiciones(ciudad):
 
     return inicio, pasajero, destino
 
-def busqueda_amplitud(ciudad):
+def busqueda_preferente_por_profundidad(ciudad):
     # Extraemos las posiciones de inicio, pasajero y destino
     inicio, pasajero, destino = encontrar_posiciones(ciudad)
-    
+
     if not inicio or not pasajero or not destino:
         print("No se encontraron todas las posiciones necesarias en el mapa.")
         return "Falló la búsqueda"
 
-    cola = deque([(inicio, 0, False, [])])  # (posición, costo acumulado, tiene pasajero, ruta)
+    # Pila para búsqueda por profundidad
+    pila = [(inicio, 0, False, [])]  # (posición, costo acumulado, tiene pasajero, ruta)
     visitados = set()
-    visitados.add((inicio, False))  # (posición, tiene pasajero)
-
-    while cola:
-        (x, y), costo_acumulado, tiene_pasajero, ruta = cola.popleft()
+    
+    while pila:
+        (x, y), costo_acumulado, tiene_pasajero, ruta = pila.pop()
 
         # Si encontramos al pasajero y luego el destino
         if (x, y) == destino and tiene_pasajero:
@@ -61,13 +64,16 @@ def busqueda_amplitud(ciudad):
                 nueva_pos = (nuevo_x, nuevo_y)
                 nuevo_costo = costo_acumulado + costo(ciudad[nuevo_x][nuevo_y])
                 
+                nuevo_tiene_pasajero = tiene_pasajero
                 # Verificar si alcanzamos al pasajero
                 if ciudad[nuevo_x][nuevo_y] == 5:
-                    tiene_pasajero = True
+                    nuevo_tiene_pasajero = True
                 
                 # Solo continuar si no hemos visitado este estado
-                if (nueva_pos, tiene_pasajero) not in visitados:
-                    visitados.add((nueva_pos, tiene_pasajero))
-                    cola.append((nueva_pos, nuevo_costo, tiene_pasajero, ruta + [(x, y)]))
+                if (nueva_pos, nuevo_tiene_pasajero) not in visitados:
+                    visitados.add((nueva_pos, nuevo_tiene_pasajero))
+                    # Añadir la nueva posición a la ruta
+                    nueva_ruta = ruta + [(x, y)]
+                    pila.append((nueva_pos, nuevo_costo, nuevo_tiene_pasajero, nueva_ruta))
 
     return "Falló la búsqueda"
