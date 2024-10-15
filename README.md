@@ -1,4 +1,4 @@
-# ModEx
+# Smart Car
 ### Proyecto I | INteligencia Artificial
 
 Smart Car. En una ciudad inteligente un vehículo autónomo debe ubicar a un pasajero y 
