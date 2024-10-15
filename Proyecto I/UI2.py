@@ -67,7 +67,7 @@ class Application2:
         self.root.geometry(f"{width}x{height}+{x}+{y}")
         self.root.resizable(False, False)
         
-        gif_path = os.path.abspath("ProyectoIA_SmartCar/Proyecto I/img/mainScr.gif")
+        gif_path = os.path.abspath("img/mainScr.gif")
         self.show_gif(self.root, gif_path, width=1067, height=600)
         
         button_frame = tk.Frame(self.root, bg='#121212', bd=0)
@@ -167,7 +167,7 @@ class Application2:
             "fg": "white",
         }
         
-        img_path = os.path.abspath("ProyectoIA_SmartCar/Proyecto I/img/secondSrc.png")
+        img_path = os.path.abspath("img/secondSrc.png")
         red_img = Image.open(img_path)
         resized_image = red_img.resize((521, 289), Image.LANCZOS)
         self.img = ImageTk.PhotoImage(resized_image)
@@ -201,9 +201,9 @@ class Application2:
         # Limpiar el canvas
         canvas.delete("all")
         
-        ruta_vehiculo = os.path.abspath("ProyectoIA_SmartCar/Proyecto I/img/car2.png")
-        ruta_pasajero = os.path.abspath("ProyectoIA_SmartCar/Proyecto I/img/passenger2.png")
-        ruta_meta = os.path.abspath("ProyectoIA_SmartCar/Proyecto I/img/goal.png")
+        ruta_vehiculo = os.path.abspath("img/car2.png")
+        ruta_pasajero = os.path.abspath("img/passenger2.png")
+        ruta_meta = os.path.abspath("img/goal.png")
         self.imagen_vehiculo = self.cargar_imagen(ruta_vehiculo)
         self.imagen_pasajero = self.cargar_imagen(ruta_pasajero)
         self.imagen_meta = self.cargar_imagen(ruta_meta)
