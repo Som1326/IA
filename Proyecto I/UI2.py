@@ -299,8 +299,8 @@ class Application2:
             self.root.update()
             time.sleep(0.6)  # Esperar un poco para ver el movimiento
         self.activar_botones()
-        messagebox.showinfo("Destino alcanzado", "¡Ha llegado a su destino!")
-    
+        # messagebox.showinfo("Destino alcanzado", "¡Ha llegado a su destino!")
+
     def mostrar_resultados(self, resultado):
         # Actualizar los valores de las etiquetas con los resultados
         self.nodos_label.config(text=str(resultado["nodos_expandidos"]))
