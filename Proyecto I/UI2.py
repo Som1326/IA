@@ -250,7 +250,7 @@ class Application2:
             self.dibujar_mapa(self.city)
         self.nodos_label.config(text="")
         self.profundidad_label.config(text="")
-        self.tiempo_label.config(text="")
+        # self.tiempo_label.config(text="")
         self.costo_label.config(text="")
     
     def desactivar_botones(self):

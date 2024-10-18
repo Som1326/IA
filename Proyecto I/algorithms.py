@@ -33,7 +33,7 @@ class SmartCar:
             return 1  # el costo de la casilla del pasajero es como una vía libre
         elif casilla == 6:
             return 1  # el costo de la casilla del destino es como una vía libre
-        return float('inf')  # Infinito para posiciones no válidas
+        return 0
 
     def heuristica(self, pos, destino):
         # Distancia de Manhattan
@@ -112,6 +112,7 @@ class SmartCar:
 
     def busqueda_costo_uniforme(self, ciudad):
         # Extraemos las posiciones de inicio, pasajero y destino
+        
         inicio, pasajero, destino = self.encontrar_posiciones(ciudad)
         
         if not inicio or not pasajero or not destino:
@@ -121,6 +122,7 @@ class SmartCar:
         tiempo_inicio = time.time()
         nodos_expandidos = 0
         profundidad_arbol = 0
+        
         # Cola de prioridad (costo acumulado, posición, tiene pasajero, ruta)
         cola_prioridad = [(0, inicio, False, [])]
         visitados = set()
@@ -286,6 +288,7 @@ class SmartCar:
     def busqueda_A_estrella(self, ciudad):
         # Extraemos las posiciones de inicio, pasajero y destino
         inicio, pasajero, destino = self.encontrar_posiciones(ciudad)
+        
 
         if not inicio or not pasajero or not destino:
             print("No se encontraron todas las posiciones necesarias en el mapa.")
@@ -308,18 +311,7 @@ class SmartCar:
                 profundidad_arbol = len(ruta)
             
             # Si encontramos al pasajero y luego el destino
-            if (x, y) == destino and tiene_pasajero:
-                tiempo_fin = time.time()
-                tiempo_total = tiempo_fin - tiempo_inicio
-                return {
-                    "ruta": ruta + [(x, y)],
-                    "heuristica": self.heuristica(destino, destino),
-                    "costo": costo_acumulado,
-                    "nodos_expandidos": nodos_expandidos,
-                    "profundidad_arbol": profundidad_arbol,
-                    "tiempo_computo": tiempo_total
-                }
-
+            
             # Expandir el nodo
             for dx, dy in self.MOVIMIENTOS:
                 nuevo_x, nuevo_y = x + dx, y + dy
@@ -342,5 +334,18 @@ class SmartCar:
                         else:
                             # Añadir a la cola de prioridad con el valor de la heurística al pasajero
                             heapq.heappush(cola_prioridad, (nuevo_costo + self.heuristica(nueva_pos, pasajero), nueva_pos, nuevo_tiene_pasajero, nueva_ruta, nuevo_costo))
+                            
+            if (x, y) == destino and tiene_pasajero:
+                tiempo_fin = time.time()
+                tiempo_total = tiempo_fin - tiempo_inicio
+                return {
+                    "ruta": ruta + [(x, y)],
+                    "heuristica": self.heuristica(destino, destino),
+                    "costo": costo_acumulado,
+                    "nodos_expandidos": nodos_expandidos,
+                    "profundidad_arbol": profundidad_arbol,
+                    "tiempo_computo": tiempo_total
+                }
+
 
         return "Falló la búsqueda"
